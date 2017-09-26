@@ -1,14 +1,13 @@
-## [TakePhoto](https://github.com/crazycodeboy/TakePhoto) 简介
+## [TakePhoto](https://github.com/QuincySx/TakePhoto) 简介
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](https://github.com/crazycodeboy/TakePhoto/pulls)
-[![Download](https://api.bintray.com/packages/crazycodeboy/maven/TakePhoto/images/download.svg) ](https://bintray.com/crazycodeboy/maven/TakePhoto/_latestVersion)
-[![GitHub release](https://img.shields.io/github/release/crazycodeboy/TakePhoto.svg?maxAge=2592000?style=flat-square)](https://github.com/crazycodeboy/TakePhoto/releases)
+[![](https://jitpack.io/v/QuincySx/TakePhoto.svg)](https://jitpack.io/#QuincySx/TakePhoto)
 [![License Apache2.0](http://img.shields.io/badge/license-Apache2.0-brightgreen.svg?style=flat)](https://raw.githubusercontent.com/crazycodeboy/TakePhoto/master/LICENSE)
 
+本库是 Fork [crazycodeboy](https://github.com/crazycodeboy) 的 [TakePhoto](https://github.com/QuincySx/TakePhoto) 在功能上并没有进行任何修改，是仿照 Glide 添加 Fragment 来监听生命周期的方式，修改了调用方式
 
+`TakePhoto`是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本[4.0.7](https://github.com/QuincySx/TakePhoto)。 
 
-`TakePhoto`是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本[4.0.3](https://github.com/crazycodeboy/TakePhoto/)。
-3.0以下版本及API说明，详见[TakePhoto2.0+](https://github.com/crazycodeboy/TakePhoto/blob/master/README.2+.md)。  
+原作者 GitHub 地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/crazycodeboy/TakePhoto)
 
 >TakePhoto交流平台：QQ群：556387607（群1，未满）
 
@@ -30,7 +29,7 @@
 - +支持多种压缩工具
 - +支持多种图片选择工具
 
-GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/crazycodeboy/TakePhoto)
+
 ## 目录
 
 - [安装说明](#安装说明)
@@ -47,17 +46,32 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 **Gradle:**  
 
 ```groovy
-    compile 'com.jph.takephoto:takephoto_library:4.0.3'
+    allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+	
+	dependencies {
+	        compile 'com.github.QuincySx:TakePhoto:v4.0.7'
+	}
 ```
 
 **Maven:**  
 
 ```groovy
+<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://www.jitpack.io</url>
+		</repository>
+</repositories>
+
 <dependency>
-  <groupId>com.jph.takephoto</groupId>
-  <artifactId>takephoto_library</artifactId>
-  <version>4.0.3</version>
-  <type>pom</type>
+	   <groupId>com.github.QuincySx</groupId>
+	   <artifactId>TakePhoto</artifactId>
+	   <version>v4.0.7</version>
 </dependency>
 ```  
 
@@ -72,21 +86,24 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 ## 使用说明   
 
 ### 使用TakePhoto有以下两种方式：
-**方式一：通过继承的方式**  
-1. 继承`TakePhotoActivity`、`TakePhotoFragmentActivity`、`TakePhotoFragment`三者之一。  
-2. 通过`getTakePhoto()`获取`TakePhoto`实例进行相关操作。  
+**方式一：直接调用方式**
+1. 实现`TakePhoto.TakeResultListener` 接口  
+2. 通过`XTakePhoto mXTakePhoto = XTakePhoto.with(this);`获取`XTakePhoto`实例进行相关操作。  
 3. 重写以下方法获取结果        
-
 ```java
  void takeSuccess(TResult result);
  void takeFail(TResult result,String msg);
  void takeCancel();
 ```  
-此方式使用简单，满足的大部分的使用需求，具体使用详见[simple](https://github.com/crazycodeboy/TakePhoto/blob/master/simple/src/main/java/com/jph/simple/SimpleActivity.java)。如果通过继承的方式无法满足实际项目的使用，可以通过下面介绍的方式。  
+此方式使用简单，满足的大部分的使用需求，具体使用详见[simple](https://github.com/QuincySx/TakePhoto/blob/master/simple/src/main/java/com/jph/simple/SimpleAppCompatActivity.java)。
+
+此方式只能用于 v4 包下的 Fragment 、v4 包下的 FragmentActivity 以及 v7 包下的 AppCompatActivity 能够使用，但是对于现在已经足够满足我们大部分需求了，不满足的话就使用第二种方式吧
+
+ps:因为本库是把这些代码写到了 Fragment 当中，原生的 Fragment 判断权限的方法要求 api23 以上版本才能调用，所以没有适配原生 Fragment 以及 Activity ,欢迎大家给我提改进意见
 
 **方式二：通过组装的方式**  
 
-可参照：[TakePhotoActivity](https://github.com/crazycodeboy/TakePhoto/blob/master/takephoto_library/src/main/java/com/jph/takephoto/app/TakePhotoActivity.java)，以下为主要步骤：  
+可参照：[SimpleActivity](https://github.com/QuincySx/TakePhoto/blob/master/simple/src/main/java/com/jph/simple/SimpleActivity.java)，以下为主要步骤：  
 
 1.实现`TakePhoto.TakeResultListener,InvokeListener`接口。
 
@@ -260,7 +277,7 @@ void onPickFromCapture(Uri outPutUri);
  **/
 void onPickMultiple(int limit);
 ```
-以上三种方式均提供对应的裁剪API，详见：[裁剪图片](https://github.com/crazycodeboy/TakePhoto#裁剪图片)。    
+以上三种方式均提供对应的裁剪API，详见：[裁剪图片](https://github.com/QuincySx/TakePhoto#裁剪图片)。    
 **注：**  
 由于不同Android Rom厂商对系统有不同程度的定制，有可能导致某种选择图片的方式不支持，所以为了提高`TakePhoto`的兼容性，当某种选的图片的方式不支持时，`TakePhoto`会自动切换成使用另一种选择图片的方式进行图片选择。      
 
@@ -439,9 +456,13 @@ eg:
 ```
 
 ## 贡献  
-如果你在使用TakePhoto中遇到任何问题可以提[Issues](https://github.com/crazycodeboy/TakePhoto/issues)出来。另外欢迎大家为TakePhoto贡献智慧，欢迎大家[Fork and Pull requests](https://github.com/crazycodeboy/TakePhoto)。     
+如果你在使用TakePhoto中遇到任何问题可以提[Issues](https://github.com/QuincySx/TakePhoto/issues)出来。另外欢迎大家为TakePhoto贡献智慧，欢迎大家[Fork and Pull requests](https://github.com/QuincySx/TakePhoto)。     
 
 ## 更新说明
+
+v4.0.7(2017/9/26)
+-----------------
+1. 修改库的调用方式
 
 v4.0.3(2017/1/18)
 -----------------
@@ -475,3 +496,5 @@ v4.0.2(2016/11/28)
 -dontwarn com.soundcloud.android.crop.**
 
 ```
+
+
