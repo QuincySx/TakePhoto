@@ -3,13 +3,15 @@
 [![](https://jitpack.io/v/QuincySx/TakePhoto.svg)](https://jitpack.io/#QuincySx/TakePhoto)
 [![License Apache2.0](http://img.shields.io/badge/license-Apache2.0-brightgreen.svg?style=flat)](https://raw.githubusercontent.com/crazycodeboy/TakePhoto/master/LICENSE)
 
+## 首先感谢作者的无私奉献
+
 本库是 Fork [crazycodeboy](https://github.com/crazycodeboy) 的 [TakePhoto](https://github.com/QuincySx/TakePhoto) 在功能上并没有进行任何修改，是仿照 Glide 添加 Fragment 来监听生命周期的方式，修改了调用方式
 
 `TakePhoto`是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本[4.0.7](https://github.com/QuincySx/TakePhoto)。 
 
 原作者 GitHub 地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/crazycodeboy/TakePhoto)
 
->TakePhoto交流平台：QQ群：556387607（群1，未满）
+>原作者 TakePhoto 交流平台：QQ群：556387607（群1，未满）
 
 **V4.0**
 
