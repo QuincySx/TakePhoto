@@ -158,19 +158,25 @@ public class TUtils {
      */
     public static void cropWithOwnApp(TContextWrap contextWrap, Uri imageUri, Uri outPutUri, CropOptions options) {
         if (options.getAspectX() * options.getAspectY() > 0) {
-            if (contextWrap.getFragment() != null) {
+            if (contextWrap.getSupportFragment() != null) {
+                Crop.of(imageUri, outPutUri).withAspect(options.getAspectX(), options.getAspectY()).start(contextWrap.getActivity(), contextWrap.getSupportFragment());
+            } else if (contextWrap.getFragment() != null) {
                 Crop.of(imageUri, outPutUri).withAspect(options.getAspectX(), options.getAspectY()).start(contextWrap.getActivity(), contextWrap.getFragment());
             } else {
                 Crop.of(imageUri, outPutUri).withAspect(options.getAspectX(), options.getAspectY()).start(contextWrap.getActivity());
             }
         } else if (options.getOutputX() * options.getOutputY() > 0) {
-            if (contextWrap.getFragment() != null) {
+            if (contextWrap.getSupportFragment() != null) {
+                Crop.of(imageUri, outPutUri).withMaxSize(options.getOutputX(), options.getOutputY()).start(contextWrap.getActivity(), contextWrap.getSupportFragment());
+            } else if (contextWrap.getFragment() != null) {
                 Crop.of(imageUri, outPutUri).withMaxSize(options.getOutputX(), options.getOutputY()).start(contextWrap.getActivity(), contextWrap.getFragment());
             } else {
                 Crop.of(imageUri, outPutUri).withMaxSize(options.getOutputX(), options.getOutputY()).start(contextWrap.getActivity());
             }
         } else {
-            if (contextWrap.getFragment() != null) {
+            if (contextWrap.getSupportFragment() != null) {
+                Crop.of(imageUri, outPutUri).asSquare().start(contextWrap.getActivity(), contextWrap.getSupportFragment());
+            } else if (contextWrap.getFragment() != null) {
                 Crop.of(imageUri, outPutUri).asSquare().start(contextWrap.getActivity(), contextWrap.getFragment());
             } else {
                 Crop.of(imageUri, outPutUri).asSquare().start(contextWrap.getActivity());
@@ -181,6 +187,7 @@ public class TUtils {
     /**
      * 是否裁剪之后返回数据
      **/
+
     public static boolean isReturnData() {
         String release = Build.VERSION.RELEASE;
         int sdk = Build.VERSION.SDK_INT;
