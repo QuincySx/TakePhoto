@@ -86,6 +86,11 @@ public class TakePhotoImpl implements TakePhoto {
         this.listener = listener;
     }
 
+    public TakePhotoImpl(android.app.Fragment fragment, TakeResultListener listener) {
+        contextWrap = TContextWrap.of(fragment);
+        this.listener = listener;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
