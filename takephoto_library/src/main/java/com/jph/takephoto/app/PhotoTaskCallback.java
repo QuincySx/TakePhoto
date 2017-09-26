@@ -1,4 +1,4 @@
-package com.jph.takephoto.client;
+package com.jph.takephoto.app;
 
 import android.net.Uri;
 

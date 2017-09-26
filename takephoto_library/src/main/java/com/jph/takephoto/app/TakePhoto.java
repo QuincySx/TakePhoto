@@ -32,7 +32,7 @@ import com.jph.takephoto.permission.PermissionManager;
  * GitHub:https://github.com/crazycodeboy
  * Eamil:crazycodeboy@gmail.com
  */
-public interface ITakePhoto {
+public interface TakePhoto {
     /**
      * 图片多选
      * @param limit 最多选择图片张数的限制

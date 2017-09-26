@@ -58,7 +58,7 @@ import java.util.Map;
  * GitHub:https://github.com/crazycodeboy
  * Eamil:crazycodeboy@gmail.com
  */
-public class TakePhotoImpl implements ITakePhoto {
+public class TakePhotoImpl implements TakePhoto {
     private static final String TAG = IntentUtils.class.getName();
     private TContextWrap contextWrap;
     private TakeResultListener listener;
@@ -82,11 +82,6 @@ public class TakePhotoImpl implements ITakePhoto {
     }
 
     public TakePhotoImpl(Fragment fragment, TakeResultListener listener) {
-        contextWrap = TContextWrap.of(fragment);
-        this.listener = listener;
-    }
-
-    public TakePhotoImpl(android.app.Fragment fragment, TakeResultListener listener) {
         contextWrap = TContextWrap.of(fragment);
         this.listener = listener;
     }
@@ -166,7 +161,8 @@ public class TakePhotoImpl implements ITakePhoto {
                 break;
             case TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP://拍取照片,并裁剪
                 if (resultCode == Activity.RESULT_OK) {
-                    if(takePhotoOptions!=null&&takePhotoOptions.isCorrectImage())ImageRotateUtil.of().correctImage(contextWrap.getActivity(), tempUri);
+                    if (takePhotoOptions != null && takePhotoOptions.isCorrectImage())
+                        ImageRotateUtil.of().correctImage(contextWrap.getActivity(), tempUri);
                     try {
                         onCrop(tempUri, Uri.fromFile(new File(TUriParse.parseOwnUri(contextWrap.getActivity(), outPutUri))), cropOptions);
                     } catch (TException e) {
@@ -179,7 +175,8 @@ public class TakePhotoImpl implements ITakePhoto {
                 break;
             case TConstant.RC_PICK_PICTURE_FROM_CAPTURE://拍取照片
                 if (resultCode == Activity.RESULT_OK) {
-                    if(takePhotoOptions!=null&&takePhotoOptions.isCorrectImage())ImageRotateUtil.of().correctImage(contextWrap.getActivity(), outPutUri);
+                    if (takePhotoOptions != null && takePhotoOptions.isCorrectImage())
+                        ImageRotateUtil.of().correctImage(contextWrap.getActivity(), outPutUri);
                     try {
                         takeResult(TResult.of(TImage.of(TUriParse.getFilePathWithUri(outPutUri, contextWrap.getActivity()), fromType)));
                     } catch (TException e) {
@@ -421,7 +418,7 @@ public class TakePhotoImpl implements ITakePhoto {
             CompressImageImpl.of(contextWrap.getActivity(), compressConfig, result.getImages(), new CompressImage.CompressListener() {
                 @Override
                 public void onCompressSuccess(ArrayList<TImage> images) {
-                    if(!compressConfig.isEnableReserveRaw()) {
+                    if (!compressConfig.isEnableReserveRaw()) {
                         deleteRawFile(images);
                     }
                     handleTakeCallBack(result);
@@ -431,7 +428,7 @@ public class TakePhotoImpl implements ITakePhoto {
 
                 @Override
                 public void onCompressFailed(ArrayList<TImage> images, String msg) {
-                    if(!compressConfig.isEnableReserveRaw()) {
+                    if (!compressConfig.isEnableReserveRaw()) {
                         deleteRawFile(images);
                     }
                     handleTakeCallBack(TResult.of(images), String.format(contextWrap.getActivity().getResources().getString(R.string.tip_compress_failed), message.length > 0 ? message[0] : "", msg, result.getImage().getCompressPath()));
@@ -443,8 +440,8 @@ public class TakePhotoImpl implements ITakePhoto {
     }
 
     private void deleteRawFile(ArrayList<TImage> images) {
-        for(TImage image : images) {
-            if(TImage.FromType.CAMERA == fromType) {
+        for (TImage image : images) {
+            if (TImage.FromType.CAMERA == fromType) {
                 TFileUtils.delete(image.getOriginalPath());
                 image.setOriginalPath("");
             }

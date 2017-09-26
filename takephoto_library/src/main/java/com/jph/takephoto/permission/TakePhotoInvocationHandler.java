@@ -1,6 +1,6 @@
 package com.jph.takephoto.permission;
 
-import com.jph.takephoto.app.ITakePhoto;
+import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.model.InvokeParam;
 
 import java.lang.reflect.InvocationHandler;
@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 public class TakePhotoInvocationHandler implements InvocationHandler{
-    private ITakePhoto delegate;
+    private TakePhoto delegate;
     private InvokeListener listener;
     public static TakePhotoInvocationHandler of(InvokeListener listener){
         return new TakePhotoInvocationHandler(listener);
@@ -23,7 +23,7 @@ public class TakePhotoInvocationHandler implements InvocationHandler{
      * @param delegate
      * @return
      */
-    public Object bind(ITakePhoto delegate) {
+    public Object bind(TakePhoto delegate) {
         this.delegate = delegate;
         return Proxy.newProxyInstance(delegate.getClass().getClassLoader(), delegate.getClass().getInterfaces(), this);
     }
@@ -31,9 +31,9 @@ public class TakePhotoInvocationHandler implements InvocationHandler{
     public Object invoke(Object proxy, Method method, Object[] args)
             throws Throwable {
         PermissionManager.TPermissionType type=listener.invoke(new InvokeParam(proxy,method,args));
-        if(proxy instanceof ITakePhoto){
+        if(proxy instanceof TakePhoto){
             if(!PermissionManager.TPermissionType.NOT_NEED.equals(type)){
-                ((ITakePhoto)proxy).permissionNotify(type);
+                ((TakePhoto)proxy).permissionNotify(type);
             }
         }
         return method.invoke(delegate, args);

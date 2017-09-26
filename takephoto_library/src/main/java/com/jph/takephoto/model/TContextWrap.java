@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 public class TContextWrap {
     private Activity activity;
     private Fragment supportFragment;
-    private android.app.Fragment fragment;
 
     public static TContextWrap of(Activity activity) {
         return new TContextWrap(activity);
@@ -20,21 +19,12 @@ public class TContextWrap {
         return new TContextWrap(fragment);
     }
 
-    public static TContextWrap of(android.app.Fragment fragment) {
-        return new TContextWrap(fragment);
-    }
-
     private TContextWrap(Activity activity) {
         this.activity = activity;
     }
 
     private TContextWrap(Fragment fragment) {
         this.supportFragment = fragment;
-        this.activity = fragment.getActivity();
-    }
-
-    private TContextWrap(android.app.Fragment fragment) {
-        this.fragment = fragment;
         this.activity = fragment.getActivity();
     }
 
@@ -50,15 +40,7 @@ public class TContextWrap {
         return supportFragment;
     }
 
-    public android.app.Fragment getFragment() {
-        return fragment;
-    }
-
     public void setSupportFragment(Fragment fragment) {
         this.supportFragment = fragment;
-    }
-
-    public void setFragment(android.app.Fragment fragment) {
-        this.fragment = fragment;
     }
 }

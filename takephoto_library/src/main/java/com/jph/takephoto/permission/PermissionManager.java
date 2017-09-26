@@ -10,7 +10,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.jph.takephoto.R;
-import com.jph.takephoto.app.ITakePhoto;
+import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.model.InvokeParam;
 import com.jph.takephoto.model.TContextWrap;
 import com.jph.takephoto.uitl.TConstant;
@@ -103,8 +103,6 @@ public class PermissionManager {
     public static void requestPermission(@NonNull TContextWrap contextWrap, @NonNull String[] permissions) {
         if (contextWrap.getSupportFragment() != null) {
             contextWrap.getSupportFragment().requestPermissions(permissions, TConstant.PERMISSION_REQUEST_TAKE_PHOTO);
-        } else if (contextWrap.getFragment() != null) {
-            contextWrap.getFragment().requestPermissions(permissions, TConstant.PERMISSION_REQUEST_TAKE_PHOTO);
         } else {
             ActivityCompat.requestPermissions(contextWrap.getActivity(), permissions, TConstant.PERMISSION_REQUEST_TAKE_PHOTO);
         }
@@ -130,7 +128,7 @@ public class PermissionManager {
         return TPermissionType.WAIT;
     }
 
-    public static void handlePermissionsResult(Activity activity, TPermissionType type, InvokeParam invokeParam, ITakePhoto.TakeResultListener listener) {
+    public static void handlePermissionsResult(Activity activity, TPermissionType type, InvokeParam invokeParam, TakePhoto.TakeResultListener listener) {
         String tip = null;
         switch (type) {
             case DENIED:

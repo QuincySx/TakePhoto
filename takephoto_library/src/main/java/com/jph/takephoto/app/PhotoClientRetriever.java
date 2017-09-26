@@ -1,4 +1,4 @@
-package com.jph.takephoto.client;
+package com.jph.takephoto.app;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -34,9 +34,6 @@ public class PhotoClientRetriever implements Handler.Callback {
 
     private final Handler mHandler;
 
-    final Map<android.app.FragmentManager, PhotoManagerFragment> pendingRequestManagerFragments =
-            new HashMap<android.app.FragmentManager, PhotoManagerFragment>();
-
     final Map<FragmentManager, SupportPhotoManagerFragment> pendingSupportPhotoManagerFragments =
             new HashMap<FragmentManager, SupportPhotoManagerFragment>();
 
@@ -48,33 +45,29 @@ public class PhotoClientRetriever implements Handler.Callback {
         return INSTANCE;
     }
 
-    public PhotoManager get(Context context) {
+    public XTakePhoto get(Context context) {
         if (context == null) {
             throw new IllegalArgumentException("You cannot start a load on a null Context");
         } else if (Util.isOnMainThread() && !(context instanceof Application)) {
             if (context instanceof FragmentActivity) {
                 return get((FragmentActivity) context);
-            } else if (context instanceof Activity) {
-                return get((Activity) context);
-//            } else if (context instanceof ContextWrapper) {
-//                return get(((ContextWrapper) context).getBaseContext());
             }
         }
-        throw new RuntimeException("You can't pass in Applicationontext");
+        throw new RuntimeException("只支持 V4 包 Fragment 、 FragmentActivity 以及 AppCompatActivity");
     }
 
-    public PhotoManager get(FragmentActivity activity) {
+    public XTakePhoto get(FragmentActivity activity) {
         if (Util.isOnBackgroundThread()) {
             return get(activity.getApplicationContext());
         } else {
             assertNotDestroyed(activity);
             FragmentManager fm = activity.getSupportFragmentManager();
             assertNotTakePhotoListener(activity);
-            return supportFragmentGet(activity, fm, (TakePhotoListener) activity);
+            return supportFragmentGet(activity, fm, (TakePhoto.TakeResultListener) activity);
         }
     }
 
-    public PhotoManager get(Fragment fragment) {
+    public XTakePhoto get(Fragment fragment) {
         if (fragment.getActivity() == null) {
             throw new IllegalArgumentException("You cannot start a load on a fragment before it is attached");
         }
@@ -83,25 +76,13 @@ public class PhotoClientRetriever implements Handler.Callback {
         } else {
             FragmentManager fm = fragment.getChildFragmentManager();
             assertNotTakePhotoListener(fragment);
-            return supportFragmentGet(fragment.getActivity(), fm, (TakePhotoListener) fragment);
+            return supportFragmentGet(fragment.getActivity(), fm, (TakePhoto.TakeResultListener) fragment);
         }
     }
 
     public void assertNotTakePhotoListener(Object o) {
-        if (!(o instanceof TakePhotoListener)) {
+        if (!(o instanceof TakePhoto.TakeResultListener)) {
             throw new RuntimeException("Please take the TakePhotoListener interface first");
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public PhotoManager get(Activity activity) {
-        if (Util.isOnBackgroundThread() || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            return get(activity.getApplicationContext());
-        } else {
-            assertNotDestroyed(activity);
-            android.app.FragmentManager fm = activity.getFragmentManager();
-            assertNotTakePhotoListener(activity);
-            return fragmentGet(activity, fm, (TakePhotoListener) activity);
         }
     }
 
@@ -110,47 +91,6 @@ public class PhotoClientRetriever implements Handler.Callback {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed()) {
             throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
         }
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public PhotoManager get(android.app.Fragment fragment) {
-        if (fragment.getActivity() == null) {
-            throw new IllegalArgumentException("You cannot start a load on a fragment before it is attached");
-        }
-        if (Util.isOnBackgroundThread() || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            return get(fragment.getActivity().getApplicationContext());
-        } else {
-            android.app.FragmentManager fm = fragment.getChildFragmentManager();
-            assertNotTakePhotoListener(fragment);
-            return fragmentGet(fragment.getActivity(), fm, (TakePhotoListener) fragment);
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    PhotoManagerFragment getRequestManagerFragment(final android.app.FragmentManager fm) {
-        PhotoManagerFragment current = (PhotoManagerFragment) fm.findFragmentByTag(FRAGMENT_TAG);
-        if (current == null) {
-            current = pendingRequestManagerFragments.get(fm);
-            if (current == null) {
-                current = new PhotoManagerFragment();
-                pendingRequestManagerFragments.put(fm, current);
-                fm.beginTransaction().add(current, FRAGMENT_TAG).commitAllowingStateLoss();
-                mHandler.obtainMessage(ID_REMOVE_FRAGMENT_MANAGER, fm).sendToTarget();
-            }
-        }
-        return current;
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    PhotoManager fragmentGet(Context context, android.app.FragmentManager fm, TakePhotoListener takePhotoListener) {
-        PhotoManagerFragment current = getRequestManagerFragment(fm);
-        PhotoManager photoManager = current.getPhotoManager();
-        if (photoManager == null) {
-            photoManager = new PhotoManager(context, current);
-            photoManager.setTakePhotoListener(takePhotoListener);
-            current.setPhotoManager(photoManager);
-        }
-        return photoManager;
     }
 
     SupportPhotoManagerFragment getSupportRequestManagerFragment(final FragmentManager fm) {
@@ -167,11 +107,11 @@ public class PhotoClientRetriever implements Handler.Callback {
         return current;
     }
 
-    PhotoManager supportFragmentGet(Context context, FragmentManager fm, TakePhotoListener takePhotoListener) {
+    XTakePhoto supportFragmentGet(Context context, FragmentManager fm, TakePhoto.TakeResultListener takePhotoListener) {
         SupportPhotoManagerFragment current = getSupportRequestManagerFragment(fm);
-        PhotoManager photoManager = current.getPhotoManager();
+        XTakePhoto photoManager = current.getPhotoManager();
         if (photoManager == null) {
-            photoManager = new PhotoManager(context, current);
+            photoManager = new XTakePhoto(context, current);
             photoManager.setTakePhotoListener(takePhotoListener);
             current.setPhotoManager(photoManager);
         }
@@ -184,11 +124,6 @@ public class PhotoClientRetriever implements Handler.Callback {
         Object removed = null;
         Object key = null;
         switch (message.what) {
-            case ID_REMOVE_FRAGMENT_MANAGER:
-                android.app.FragmentManager fm = (android.app.FragmentManager) message.obj;
-                key = fm;
-                removed = pendingRequestManagerFragments.remove(fm);
-                break;
             case ID_REMOVE_SUPPORT_FRAGMENT_MANAGER:
                 FragmentManager supportFm = (FragmentManager) message.obj;
                 key = supportFm;

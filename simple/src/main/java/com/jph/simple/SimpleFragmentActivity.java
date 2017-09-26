@@ -1,8 +1,9 @@
 package com.jph.simple;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 
 
@@ -26,26 +27,22 @@ import android.view.View;
  * GitHub:https://github.com/crazycodeboy
  * Eamil:crazycodeboy@gmail.com
  */
-public class MainActivity extends Activity implements View.OnClickListener {
+public class SimpleFragmentActivity extends AppCompatActivity {
+    SimpleFragment simpleFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_layout);
+        View contentView = LayoutInflater.from(this).inflate(R.layout.simple_fragment_layout, null);
+        setContentView(contentView);
+
+        simpleFragment = new SimpleFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragment1, simpleFragment);
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btnTakePhotoActivity:
-                startActivity(new Intent(this, SimpleAppCompatActivity.class));
-                break;
-            case R.id.btnTakePhotoAppComActivity:
-                startActivity(new Intent(this, SimpleAppCompatActivity.class));
-                break;
-            case R.id.btnTakePhotoFragment:
-                startActivity(new Intent(this, SimpleFragmentActivity.class));
-                break;
-            default:
-        }
+    public void onClick(View v) {
+        simpleFragment.onClick(v);
     }
 }
