@@ -58,7 +58,7 @@ import java.util.Map;
  * GitHub:https://github.com/crazycodeboy
  * Eamil:crazycodeboy@gmail.com
  */
-public class TakePhotoImpl implements TakePhoto {
+public class TakePhotoImpl implements ITakePhoto {
     private static final String TAG = IntentUtils.class.getName();
     private TContextWrap contextWrap;
     private TakeResultListener listener;

@@ -5,7 +5,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import com.jph.takephoto.app.TakePhoto;
+import com.jph.takephoto.app.ITakePhoto;
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.LubanOptions;
@@ -66,7 +66,7 @@ public class CustomHelper{
 
     }
 
-    public void onClick(View view,TakePhoto takePhoto) {
+    public void onClick(View view,ITakePhoto takePhoto) {
         File file=new File(Environment.getExternalStorageDirectory(), "/temp/"+System.currentTimeMillis() + ".jpg");
         if (!file.getParentFile().exists())file.getParentFile().mkdirs();
         Uri imageUri = Uri.fromFile(file);
@@ -110,7 +110,7 @@ public class CustomHelper{
                 break;
         }
     }
-    private void configTakePhotoOption(TakePhoto takePhoto){
+    private void configTakePhotoOption(ITakePhoto takePhoto){
         TakePhotoOptions.Builder builder=new TakePhotoOptions.Builder();
         if(rgPickTool.getCheckedRadioButtonId()==R.id.rbPickWithOwn){
             builder.setWithOwnGallery(true);
@@ -121,7 +121,7 @@ public class CustomHelper{
         takePhoto.setTakePhotoOptions(builder.create());
 
     }
-    private void configCompress(TakePhoto takePhoto){
+    private void configCompress(ITakePhoto takePhoto){
         if(rgCompress.getCheckedRadioButtonId()!=R.id.rbCompressYes){
             takePhoto.onEnableCompress(null,false);
             return ;
