@@ -461,7 +461,7 @@ eg:
 如果你在使用TakePhoto中遇到任何问题可以提[Issues](https://github.com/QuincySx/TakePhoto/issues)出来。另外欢迎大家为TakePhoto贡献智慧，欢迎大家[Fork and Pull requests](https://github.com/QuincySx/TakePhoto)。     
 
 ## 更新说明
-v4.0.8(2017/9/26)
+v4.0.8(2017/10/15)
 -----------------
 1. 修复在Fragment没有 onAttr 的时候调用 TakePhoto 设置配置的时候，出现闪退BUG
 
