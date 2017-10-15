@@ -1,9 +1,7 @@
 package com.jph.takephoto.app;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
@@ -27,7 +25,7 @@ import java.io.File;
  * 如果你们想在原生 Fragment 、 Activity 上使用请参照 Github 用法手动实现
  */
 
-public class XTakePhoto implements TakePhoto {
+public class XTakePhoto implements IXTakePhoto {
     public static XTakePhoto with(Context context) {
         PhotoClientRetriever retriever = PhotoClientRetriever.get();
         return retriever.get(context);
@@ -44,12 +42,12 @@ public class XTakePhoto implements TakePhoto {
     }
 
     private final Context mContext;
-    private TakePhoto.TakeResultListener mTakePhotoListener;
+    private ITakePhotoHandle.TakeResultListener mTakePhotoListener;
     private TakePhoto mTakePhoto;
     private CropOptions mCropOptions;
 
     XTakePhoto(Context context, TakePhoto takePhoto) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mTakePhoto = takePhoto;
 
         mCropOptions = new CropOptions.Builder()
@@ -59,11 +57,11 @@ public class XTakePhoto implements TakePhoto {
                 .create();
     }
 
-    public void setTakePhotoListener(TakePhoto.TakeResultListener takePhotoListener) {
+    public void setTakePhotoListener(ITakePhotoHandle.TakeResultListener takePhotoListener) {
         mTakePhotoListener = takePhotoListener;
     }
 
-    public TakePhoto.TakeResultListener getTakePhotoListener() {
+    public ITakePhotoHandle.TakeResultListener getTakePhotoListener() {
         return mTakePhotoListener;
     }
 
@@ -156,16 +154,5 @@ public class XTakePhoto implements TakePhoto {
         mTakePhoto.setTakePhotoOptions(options);
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    }
 }
 

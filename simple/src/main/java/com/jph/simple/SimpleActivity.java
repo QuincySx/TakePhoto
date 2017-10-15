@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.jph.takephoto.app.ITakePhotoHandle;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoImpl;
 import com.jph.takephoto.model.InvokeParam;
@@ -35,7 +36,7 @@ import com.jph.takephoto.permission.TakePhotoInvocationHandler;
  * GitHub:https://github.com/crazycodeboy
  * Eamil:crazycodeboy@gmail.com
  */
-public class SimpleActivity extends Activity implements TakePhoto.TakeResultListener, InvokeListener {
+public class SimpleActivity extends Activity implements ITakePhotoHandle.TakeResultListener, InvokeListener {
     private static final String TAG = SimpleActivity.class.getName();
     private TakePhoto takePhoto;
     private InvokeParam invokeParam;

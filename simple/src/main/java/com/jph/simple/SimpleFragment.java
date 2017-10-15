@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.jph.takephoto.app.TakePhoto;
+import com.jph.takephoto.app.ITakePhotoHandle;
 import com.jph.takephoto.app.XTakePhoto;
 import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TResult;
@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * GitHub:https://github.com/crazycodeboy
  * Eamil:crazycodeboy@gmail.com
  */
-public class SimpleFragment extends Fragment implements TakePhoto.TakeResultListener {
+public class SimpleFragment extends Fragment implements ITakePhotoHandle.TakeResultListener {
     private CustomHelper customHelper;
     private XTakePhoto mXTakePhoto;
 

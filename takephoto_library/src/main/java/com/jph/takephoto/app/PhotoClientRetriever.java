@@ -63,7 +63,7 @@ public class PhotoClientRetriever implements Handler.Callback {
             assertNotDestroyed(activity);
             FragmentManager fm = activity.getSupportFragmentManager();
             assertNotTakePhotoListener(activity);
-            return supportFragmentGet(activity, fm, (TakePhoto.TakeResultListener) activity);
+            return supportFragmentGet(activity.getApplicationContext(), fm, (ITakePhotoHandle.TakeResultListener) activity);
         }
     }
 
@@ -76,12 +76,12 @@ public class PhotoClientRetriever implements Handler.Callback {
         } else {
             FragmentManager fm = fragment.getChildFragmentManager();
             assertNotTakePhotoListener(fragment);
-            return supportFragmentGet(fragment.getActivity(), fm, (TakePhoto.TakeResultListener) fragment);
+            return supportFragmentGet(fragment.getContext().getApplicationContext(), fm, (ITakePhotoHandle.TakeResultListener) fragment);
         }
     }
 
-    public void assertNotTakePhotoListener(Object o) {
-        if (!(o instanceof TakePhoto.TakeResultListener)) {
+    private void assertNotTakePhotoListener(Object o) {
+        if (!(o instanceof ITakePhotoHandle.TakeResultListener)) {
             throw new RuntimeException("Please take the TakePhotoListener interface first");
         }
     }
@@ -93,7 +93,7 @@ public class PhotoClientRetriever implements Handler.Callback {
         }
     }
 
-    SupportPhotoManagerFragment getSupportRequestManagerFragment(final FragmentManager fm) {
+    private SupportPhotoManagerFragment getSupportRequestManagerFragment(final FragmentManager fm) {
         SupportPhotoManagerFragment current = (SupportPhotoManagerFragment) fm.findFragmentByTag(FRAGMENT_TAG);
         if (current == null) {
             current = pendingSupportPhotoManagerFragments.get(fm);
@@ -107,7 +107,7 @@ public class PhotoClientRetriever implements Handler.Callback {
         return current;
     }
 
-    XTakePhoto supportFragmentGet(Context context, FragmentManager fm, TakePhoto.TakeResultListener takePhotoListener) {
+    private XTakePhoto supportFragmentGet(Context context, FragmentManager fm, ITakePhotoHandle.TakeResultListener takePhotoListener) {
         SupportPhotoManagerFragment current = getSupportRequestManagerFragment(fm);
         XTakePhoto photoManager = current.getPhotoManager();
         if (photoManager == null) {
