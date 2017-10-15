@@ -7,7 +7,7 @@
 
 本库是 Fork [crazycodeboy](https://github.com/crazycodeboy) 的 [TakePhoto](https://github.com/QuincySx/TakePhoto) 在功能上并没有进行任何修改，是仿照 Glide 添加 Fragment 来监听生命周期的方式，修改了调用方式
 
-`TakePhoto`是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本[4.0.7](https://github.com/QuincySx/TakePhoto)。 
+`TakePhoto`是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本[4.0.8](https://github.com/QuincySx/TakePhoto)。 
 
 原作者 GitHub 地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/crazycodeboy/TakePhoto)
 
@@ -56,7 +56,7 @@
 	}
 	
 	dependencies {
-	        compile 'com.github.QuincySx:TakePhoto:v4.0.7'
+	        compile 'com.github.QuincySx:TakePhoto:v4.0.8'
 	}
 ```
 
@@ -73,7 +73,7 @@
 <dependency>
 	   <groupId>com.github.QuincySx</groupId>
 	   <artifactId>TakePhoto</artifactId>
-	   <version>v4.0.7</version>
+	   <version>v4.0.8</version>
 </dependency>
 ```  
 
@@ -99,7 +99,7 @@
 ```  
 此方式使用简单，满足的大部分的使用需求，具体使用详见[simple](https://github.com/QuincySx/TakePhoto/blob/master/simple/src/main/java/com/jph/simple/SimpleAppCompatActivity.java)。
 
-此方式只能用于 v4 包下的 Fragment 、v4 包下的 FragmentActivity 以及 v7 包下的 AppCompatActivity 能够使用，但是对于现在已经足够满足我们大部分需求了，不满足的话就使用第二种方式吧
+此方式只能用于 v4 包下的 Fragment 、v4 包下的 FragmentActivity 以及 v7 包下的 AppCompatActivity 能够使用，但是对于现在已经足够满足我们大部分需求了，如果使用原生 Activity/Fragment 的话就使用第二种方式吧
 
 ps:因为本库是把这些代码写到了 Fragment 当中，原生的 Fragment 判断权限的方法要求 api23 以上版本才能调用，所以没有适配原生 Fragment 以及 Activity ,欢迎大家给我提改进意见
 
@@ -461,6 +461,9 @@ eg:
 如果你在使用TakePhoto中遇到任何问题可以提[Issues](https://github.com/QuincySx/TakePhoto/issues)出来。另外欢迎大家为TakePhoto贡献智慧，欢迎大家[Fork and Pull requests](https://github.com/QuincySx/TakePhoto)。     
 
 ## 更新说明
+v4.0.8(2017/9/26)
+-----------------
+1. 修复在Fragment没有 onAttr 的时候调用 TakePhoto 设置配置的时候，出现闪退BUG
 
 v4.0.7(2017/9/26)
 -----------------
